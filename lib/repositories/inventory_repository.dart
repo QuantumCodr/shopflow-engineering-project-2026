@@ -2,17 +2,19 @@
 ------------------------------------------------------------
 Program Name : ShopFlow
 Author       : QuantumCodr
-Date         : 2026-10-04
+Date         : 2026-10-05
 Language     : Dart
 Topic        : Inventory Repository
-Description  : Provides SQLite persistence for inventory
-               quantities and stock movements.
+Description  : Provides SQLite persistence for inventory.
 ------------------------------------------------------------
 */
 
 import 'package:sqlite3/sqlite3.dart';
 
+import '../core/errors/shopflow_exception.dart';
+import '../enums/stock_movement_type.dart';
 import '../models/inventory.dart';
+import '../models/stock_movement.dart';
 
 abstract interface class InventoryRepository {
   Inventory getByProductId(int productId);
@@ -28,35 +30,47 @@ abstract interface class InventoryRepository {
     int quantity, {
     String? reference,
   });
+
+  List<StockMovement> findMovementsByProduct(
+    int productId,
+  );
 }
 
-class SqliteInventoryRepository implements InventoryRepository {
+class SqliteInventoryRepository
+    implements InventoryRepository {
   final Database database;
 
   SqliteInventoryRepository(this.database);
 
   @override
   Inventory getByProductId(int productId) {
-    final rows = database.select(
-      '''
-      SELECT product_id, quantity
-      FROM inventory
-      WHERE product_id = ?
-      ''',
-      [productId],
-    );
+    try {
+      final rows = database.select(
+        '''
+        SELECT *
+        FROM inventory
+        WHERE product_id = ?
+        ''',
+        [productId],
+      );
 
-    if (rows.isEmpty) {
+      if (rows.isEmpty) {
+        return Inventory(
+          productId: productId,
+          quantity: 0,
+        );
+      }
+
       return Inventory(
-        productId: productId,
-        quantity: 0,
+        productId: rows.first['product_id'] as int,
+        quantity: rows.first['quantity'] as int,
+      );
+    } catch (error) {
+      throw PersistenceException(
+        message: 'Failed to retrieve inventory.',
+        cause: error,
       );
     }
-
-    return Inventory(
-      productId: rows.first['product_id'] as int,
-      quantity: rows.first['quantity'] as int,
-    );
   }
 
   @override
@@ -68,7 +82,7 @@ class SqliteInventoryRepository implements InventoryRepository {
     _changeStock(
       productId,
       quantity,
-      'RECEIPT',
+      StockMovementType.receipt,
       reference,
     );
   }
@@ -82,45 +96,116 @@ class SqliteInventoryRepository implements InventoryRepository {
     _changeStock(
       productId,
       quantity,
-      'ADJUSTMENT',
+      StockMovementType.adjustment,
       reference,
     );
+  }
+
+  @override
+  List<StockMovement> findMovementsByProduct(
+    int productId,
+  ) {
+    try {
+      final rows = database.select(
+        '''
+        SELECT *
+        FROM stock_movements
+        WHERE product_id = ?
+        ORDER BY created_at DESC, id DESC
+        ''',
+        [productId],
+      );
+
+      return rows.map(_movementFromRow).toList();
+    } catch (error) {
+      throw PersistenceException(
+        message: 'Failed to retrieve stock movements.',
+        cause: error,
+      );
+    }
   }
 
   void _changeStock(
     int productId,
     int quantity,
-    String movementType,
+    StockMovementType movementType,
     String? reference,
   ) {
-    database.execute('''
-      INSERT INTO inventory (
-        product_id,
-        quantity
-      )
-      VALUES (?, ?)
-      ON CONFLICT(product_id)
-      DO UPDATE SET quantity = quantity + excluded.quantity;
-    ''', [
-      productId,
-      quantity,
-    ]);
+    try {
+      database.execute('BEGIN');
 
-    database.execute('''
-      INSERT INTO stock_movements (
-        product_id,
-        movement_type,
-        quantity,
-        reference,
-        created_at
-      )
-      VALUES (?, ?, ?, ?, ?);
-    ''', [
-      productId,
-      movementType,
-      quantity,
-      reference,
-      DateTime.now().toUtc().toIso8601String(),
-    ]);
+      try {
+        database.execute(
+          '''
+          INSERT INTO inventory (
+            product_id,
+            quantity
+          )
+          VALUES (?, ?)
+          ON CONFLICT(product_id)
+          DO UPDATE SET
+            quantity = quantity + excluded.quantity
+          ''',
+          [productId, quantity],
+        );
+
+        final inventory = getByProductId(productId);
+
+        if (inventory.quantity < 0) {
+          throw const BusinessRuleException(
+            message: 'Inventory cannot become negative.',
+          );
+        }
+
+        database.execute(
+          '''
+          INSERT INTO stock_movements (
+            product_id,
+            movement_type,
+            quantity,
+            reference,
+            created_at
+          )
+          VALUES (?, ?, ?, ?, ?)
+          ''',
+          [
+            productId,
+            movementType.value,
+            quantity,
+            reference,
+            DateTime.now().toUtc().toIso8601String(),
+          ],
+        );
+
+        database.execute('COMMIT');
+      } catch (error) {
+        database.execute('ROLLBACK');
+        rethrow;
+      }
+    } catch (error) {
+      if (error is ShopFlowException) {
+        rethrow;
+      }
+
+      throw PersistenceException(
+        message: 'Failed to update inventory.',
+        cause: error,
+      );
+    }
+  }
+
+  StockMovement _movementFromRow(Row row) {
+    return StockMovement(
+      id: row['id'] as int,
+      productId: row['product_id'] as int,
+      movementType: StockMovementType.fromValue(
+        row['movement_type'] as String,
+      ),
+      quantity: row['quantity'] as int,
+      reference: row['reference'] as String?,
+      createdAt: DateTime.parse(
+        row['created_at'] as String,
+      ),
+    );
   }
 }

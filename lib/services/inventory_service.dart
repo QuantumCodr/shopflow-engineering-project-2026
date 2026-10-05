@@ -2,16 +2,17 @@
 ------------------------------------------------------------
 Program Name : ShopFlow
 Author       : QuantumCodr
-Date         : 2026-10-04
+Date         : 2026-10-05
 Language     : Dart
 Topic        : Inventory Service
-Description  : Contains inventory business rules and
-               stock validation.
+Description  : Contains inventory business rules.
 ------------------------------------------------------------
 */
 
+import '../core/errors/shopflow_exception.dart';
 import '../models/inventory.dart';
 import '../models/product.dart';
+import '../models/stock_movement.dart';
 import '../repositories/inventory_repository.dart';
 import '../repositories/product_repository.dart';
 
@@ -38,15 +39,15 @@ class InventoryService {
     _requireProduct(productId);
 
     if (quantity <= 0) {
-      throw ArgumentError(
-        'Received quantity must be greater than zero.',
+      throw const ValidationException(
+        message: 'Received quantity must be greater than zero.',
       );
     }
 
     inventoryRepository.receiveStock(
       productId,
       quantity,
-      reference: reference,
+      reference: _cleanReference(reference),
     );
   }
 
@@ -57,55 +58,77 @@ class InventoryService {
   }) {
     _requireProduct(productId);
 
-    final current =
-        inventoryRepository.getByProductId(productId);
+    if (quantity == 0) {
+      throw const ValidationException(
+        message: 'Adjustment quantity cannot be zero.',
+      );
+    }
 
-    final resultingQuantity =
-        current.quantity + quantity;
+    final current = inventoryRepository.getByProductId(
+      productId,
+    );
 
-    if (resultingQuantity < 0) {
-      throw StateError(
-        'Inventory cannot become negative.',
+    if (current.quantity + quantity < 0) {
+      throw const BusinessRuleException(
+        message: 'Inventory cannot become negative.',
       );
     }
 
     inventoryRepository.adjustStock(
       productId,
       quantity,
-      reference: reference,
+      reference: _cleanReference(reference),
     );
   }
 
   bool isLowStock(int productId) {
     final product = _requireProduct(productId);
-
-    final inventory =
-        inventoryRepository.getByProductId(productId);
+    final inventory = inventoryRepository.getByProductId(
+      productId,
+    );
 
     return inventory.quantity <= product.reorderLevel;
   }
 
-  List<int> findLowStockProductIds() {
-    return productRepository
-        .findAll()
-        .where((product) {
-          final inventory =
-              inventoryRepository.getByProductId(product.id!);
+  List<Product> findLowStockProducts() {
+    return productRepository.findAll().where((product) {
+      return isLowStock(product.id!);
+    }).toList();
+  }
 
-          return inventory.quantity <= product.reorderLevel;
-        })
+  List<int> findLowStockProductIds() {
+    return findLowStockProducts()
         .map((product) => product.id!)
         .toList();
   }
 
+  List<StockMovement> findMovements(int productId) {
+    _requireProduct(productId);
+
+    return inventoryRepository.findMovementsByProduct(
+      productId,
+    );
+  }
+
   Product _requireProduct(int productId) {
-    final product =
-        productRepository.findById(productId);
+    final product = productRepository.findById(productId);
 
     if (product == null) {
-      throw StateError('Product not found.');
+      throw const NotFoundException(
+        message: 'Product not found.',
+      );
     }
 
     return product;
+  }
+
+  String? _cleanReference(String? reference) {
+    final cleanReference = reference?.trim();
+
+    if (cleanReference == null || cleanReference.isEmpty) {
+      return null;
+    }
+
+    return cleanReference;
   }
 }

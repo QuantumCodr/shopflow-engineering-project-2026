@@ -28,3 +28,6 @@ export 'repositories/inventory_repository.dart';
 export 'services/category_service.dart';
 export 'services/product_service.dart';
 export 'services/inventory_service.dart';
+
+export 'repositories/category_product_repository.dart';
+export 'services/category_product_service.dart';
