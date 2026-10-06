@@ -31,6 +31,12 @@ abstract interface class InventoryRepository {
     String? reference,
   });
 
+  void sellStock(
+    int productId,
+    int quantity, {
+    String? reference,
+  });
+
   List<StockMovement> findMovementsByProduct(
     int productId,
   );
@@ -102,6 +108,20 @@ class SqliteInventoryRepository
   }
 
   @override
+  void sellStock(
+    int productId,
+    int quantity, {
+    String? reference,
+  }) {
+    _changeStock(
+      productId,
+      -quantity,
+      StockMovementType.sale,
+      reference,
+    );
+  }
+
+  @override
   List<StockMovement> findMovementsByProduct(
     int productId,
   ) {
@@ -132,56 +152,48 @@ class SqliteInventoryRepository
     String? reference,
   ) {
     try {
-      database.execute('BEGIN');
+      database.execute(
+        '''
+        INSERT OR IGNORE INTO inventory (
+          product_id,
+          quantity
+        )
+        VALUES (?, 0)
+        ''',
+        [productId],
+      );
 
-      try {
-        database.execute(
-          '''
-          INSERT INTO inventory (
-            product_id,
-            quantity
-          )
-          VALUES (?, ?)
-          ON CONFLICT(product_id)
-          DO UPDATE SET
-            quantity = quantity + excluded.quantity
-          ''',
-          [productId, quantity],
-        );
+      database.execute(
+        '''
+        UPDATE inventory
+        SET quantity = quantity + ?
+        WHERE product_id = ?
+        ''',
+        [
+          quantity,
+          productId,
+        ],
+      );
 
-        final inventory = getByProductId(productId);
-
-        if (inventory.quantity < 0) {
-          throw const BusinessRuleException(
-            message: 'Inventory cannot become negative.',
-          );
-        }
-
-        database.execute(
-          '''
-          INSERT INTO stock_movements (
-            product_id,
-            movement_type,
-            quantity,
-            reference,
-            created_at
-          )
-          VALUES (?, ?, ?, ?, ?)
-          ''',
-          [
-            productId,
-            movementType.value,
-            quantity,
-            reference,
-            DateTime.now().toUtc().toIso8601String(),
-          ],
-        );
-
-        database.execute('COMMIT');
-      } catch (error) {
-        database.execute('ROLLBACK');
-        rethrow;
-      }
+      database.execute(
+        '''
+        INSERT INTO stock_movements (
+          product_id,
+          movement_type,
+          quantity,
+          reference,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?)
+        ''',
+        [
+          productId,
+          movementType.value,
+          quantity,
+          reference,
+          DateTime.now().toUtc().toIso8601String(),
+        ],
+      );
     } catch (error) {
       if (error is ShopFlowException) {
         rethrow;

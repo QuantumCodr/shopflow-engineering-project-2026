@@ -273,6 +273,25 @@ class ShopFlowDatabase {
       ON sale_items(product_id);
     ''');
   }
+    T transaction<T>(T Function() operation) {
+    try {
+      database.execute('BEGIN');
+
+      final result = operation();
+
+      database.execute('COMMIT');
+
+      return result;
+    } catch (error) {
+      try {
+        database.execute('ROLLBACK');
+      } catch (_) {
+        // Preserve the original error.
+      }
+
+      rethrow;
+    }
+  }
 
   void close() {
     database.close();

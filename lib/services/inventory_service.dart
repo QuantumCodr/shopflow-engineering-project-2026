@@ -10,6 +10,7 @@ Description  : Contains inventory business rules.
 */
 
 import '../core/errors/shopflow_exception.dart';
+import '../database/database.dart';
 import '../models/inventory.dart';
 import '../models/product.dart';
 import '../models/stock_movement.dart';
@@ -19,10 +20,12 @@ import '../repositories/product_repository.dart';
 class InventoryService {
   final InventoryRepository inventoryRepository;
   final ProductRepository productRepository;
+  final ShopFlowDatabase database;
 
   InventoryService(
     this.inventoryRepository,
     this.productRepository,
+    this.database,
   );
 
   Inventory getStock(int productId) {
@@ -44,11 +47,13 @@ class InventoryService {
       );
     }
 
-    inventoryRepository.receiveStock(
-      productId,
-      quantity,
-      reference: _cleanReference(reference),
-    );
+    database.transaction(() {
+      inventoryRepository.receiveStock(
+        productId,
+        quantity,
+        reference: _cleanReference(reference),
+      );
+    });
   }
 
   void adjustStock(
@@ -74,11 +79,13 @@ class InventoryService {
       );
     }
 
-    inventoryRepository.adjustStock(
-      productId,
-      quantity,
-      reference: _cleanReference(reference),
-    );
+    database.transaction(() {
+      inventoryRepository.adjustStock(
+        productId,
+        quantity,
+        reference: _cleanReference(reference),
+      );
+    });
   }
 
   bool isLowStock(int productId) {
