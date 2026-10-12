@@ -17,26 +17,27 @@ The project demonstrates how software engineering principles can be applied to a
 
 ## Table of Contents
 
-1. [Project Overview](#1-project-overview)
-2. [Problem Statement](#2-problem-statement)
-3. [Project Objectives](#3-project-objectives)
-4. [Current Features](#4-current-features)
-5. [Project Scope](#5-project-scope)
-6. [Technology Stack](#6-technology-stack)
-7. [System Requirements](#7-system-requirements)
-8. [Getting Started](#8-getting-started)
-9. [Running the Application](#9-running-the-application)
-10. [Running the Tests](#10-running-the-tests)
-11. [System Architecture](#11-system-architecture)
-12. [Core Business Workflow](#12-core-business-workflow)
-13. [Data and Persistence](#13-data-and-persistence)
-14. [Project Structure](#14-project-structure)
-15. [Testing Strategy](#15-testing-strategy)
-16. [Database Safety](#16-database-safety)
-17. [Current Limitations](#17-current-limitations)
-18. [Future Development](#18-future-development)
-19. [Contributing](#19-contributing)
-20. [License](#20-license)
+1. Project Overview
+2. Problem Statement
+3. Project Objectives
+4. Current Features
+5. Project Scope
+6. Technology Stack
+7. System Requirements
+8. Getting Started
+9. Running the Application
+10. Running the Tests
+11. System Architecture
+12. Core Business Workflow
+13. Data and Persistence
+14. Project Structure
+15. Testing Strategy
+16. Database Safety
+17. Current Limitations
+18. Future Development
+19. Contributing
+20. Project Team
+21. License
 
 ---
 
