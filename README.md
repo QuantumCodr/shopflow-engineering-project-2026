@@ -667,7 +667,7 @@ ShopFlow is developed as a group project by a team of five members:
 |---|------|-----------------------|--------|
 | 1 | Member Name | e.g. Categories and products | [@username](https://github.com/username) |
 | 2 | Member Name | e.g. Inventory and stock movements | [@username](https://github.com/username) |
-| 3 | Sharon Mary Koroma | e.g. Point of Sale and sales records | [@Ramthasharon(https://github.com/username) |
+| 3 | Sharon Mary Koroma | e.g. Point of Sale and sales records | [@ramthasharon](https://github.com/username) |
 | 4 | Member Name | e.g. Reports and CLI | [@username](https://github.com/username) |
 | 5 | Member Name | e.g. Database layer and testing | [@username](https://github.com/username) |
 
