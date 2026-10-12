@@ -1,469 +1,672 @@
 # ShopFlow
 
-**Small Business Management System**
+### Small Business Management System
 
-> A simple management system that helps small retail shops manage their products, inventory, purchases, sales, customers, suppliers, employees, and basic business reports in one place.
+ShopFlow is a Dart-based business management prototype designed to help small retail shops manage product categories, products, inventory, stock movements, sales, and basic business reports through a console interface.
+
+The project demonstrates how software engineering principles can be applied to a practical retail management problem through a layered architecture, structured data persistence, business-rule validation, and automated testing.
+
+**Project:** ShopFlow — Small Business Management System
+**Language:** Dart
+**Database:** SQLite
+**Interface:** Command-line interface (CLI)
+**Version:** 0.1.0
+**Repository:** https://github.com/QuantumCodr/shopflow-engineering-project-2026
+
+---
+
+## Table of Contents
+
+1. [Project Overview](#1-project-overview)
+2. [Problem Statement](#2-problem-statement)
+3. [Project Objectives](#3-project-objectives)
+4. [Current Features](#4-current-features)
+5. [Project Scope](#5-project-scope)
+6. [Technology Stack](#6-technology-stack)
+7. [System Requirements](#7-system-requirements)
+8. [Getting Started](#8-getting-started)
+9. [Running the Application](#9-running-the-application)
+10. [Running the Tests](#10-running-the-tests)
+11. [System Architecture](#11-system-architecture)
+12. [Core Business Workflow](#12-core-business-workflow)
+13. [Data and Persistence](#13-data-and-persistence)
+14. [Project Structure](#14-project-structure)
+15. [Testing Strategy](#15-testing-strategy)
+16. [Database Safety](#16-database-safety)
+17. [Current Limitations](#17-current-limitations)
+18. [Future Development](#18-future-development)
+19. [Contributing](#19-contributing)
+20. [License](#20-license)
 
 ---
 
 ## 1. Project Overview
 
-ShopFlow is a small business management system designed for small retail shops.
+Small retail businesses need reliable ways to manage their products, monitor stock, record sales, and understand their business performance.
 
-Many small retail businesses rely on notebooks, receipts, calculators, memory, spreadsheets, or separate records to manage their daily operations. This can make it difficult to maintain accurate records of products, inventory, purchases, sales, customers, suppliers, and business performance.
+When these activities are handled through separate notebooks, receipts, calculators, spreadsheets, or memory, maintaining accurate and consistent records can become difficult.
 
-ShopFlow aims to provide a simple and centralized system for managing these activities.
+ShopFlow is a software prototype intended to address these challenges by bringing selected retail operations into one system.
 
-The first version of ShopFlow is being developed as a Dart console application with SQLite persistence. The project is intentionally being developed in stages so that the initial system can evolve into a larger application without requiring the core business logic to be rewritten.
+The initial version uses Dart for application logic and SQLite for local data persistence. Its console interface allows a user to interact with the system without requiring a web application, mobile application, or cloud service.
 
----
+The project is being developed incrementally. The current version focuses on essential retail operations while establishing a foundation for future development.
 
 ## 2. Problem Statement
 
-Small retail businesses often lack a simple, centralized system for managing their day-to-day product, inventory, purchasing, and sales operations.
+Small retail businesses may experience difficulties maintaining accurate product, inventory, and sales records when their operations depend on manual or disconnected record-keeping methods.
 
-This can result in:
+Potential consequences include:
 
-- inefficient record keeping;
-- difficulty tracking available stock;
-- inaccurate or incomplete sales records;
-- limited visibility into business performance;
-- difficulty identifying low-stock products;
-- difficulty determining which products sell well; and
-- difficulty making informed business decisions.
+* Inefficient record keeping.
+* Difficulty determining available stock.
+* Incomplete or inaccurate sales records.
+* Difficulty identifying products that need restocking.
+* Limited visibility into sales performance.
+* Difficulty determining the profitability of recorded sales.
+* Delayed or poorly informed business decisions.
 
-ShopFlow is intended to address these problems through a centralized business management system.
+ShopFlow proposes a centralized software solution for selected retail management activities.
 
----
+The project represents a software-engineering prototype. Claims about the practices of a particular retail business should be supported by actual observations or interviews rather than assumed.
 
 ## 3. Project Objectives
 
-The main objectives of ShopFlow are to:
+The objectives of ShopFlow are to:
 
 1. Manage product categories.
 2. Manage products and their pricing information.
-3. Track inventory levels.
+3. Track inventory quantities.
 4. Record stock movements.
 5. Process sales through a point-of-sale workflow.
-6. Maintain sales records.
-7. Provide basic business reports.
-8. Reduce dependence on manual record keeping.
-9. Demonstrate sound software engineering principles.
-10. Establish a foundation that can be extended into a larger application.
+6. Maintain sales and sale-item records.
+7. Generate basic business reports.
+8. Reduce dependence on disconnected record-keeping methods.
+9. Demonstrate separation of responsibilities in application architecture.
+10. Apply validation, persistence, and automated testing.
+11. Establish a foundation for future system development.
 
----
+## 4. Current Features
 
-## 4. Assignment 1 Scope
+The initial version focuses on the following functionality.
 
-Assignment 1 focuses on the core operational workflow of a small retail shop.
+### 4.1 Category Management
 
-### Included
+Supports the management of product categories used to organize retail products.
 
-- Categories
-- Products
-- Inventory
-- Stock movements
-- Point of Sale
-- Sales
-- Basic reports
-- SQLite data persistence
-- Dart console interface
-- Automated tests
+### 4.2 Product Management
 
-### Not Included in Version 0.1
+Manages product information, including applicable identification, unit, pricing, reorder-level, and active-status fields.
 
-The following features are intentionally deferred:
+### 4.3 Inventory Tracking
 
-- Flutter mobile application
-- Online ordering
-- Delivery management
-- GPS/location services
-- Marketplace functionality
-- Supplier management
-- Purchase management
-- Customer management
-- Employee management
-- Authentication
-- Advanced authorization
-- Cloud database
-- Supabase integration
-- API/backend communication
-- Multi-branch management
-- Payroll
-- Accounting
-- Advanced analytics
-- Artificial intelligence
+Maintains inventory information for products and supports stock-related operations.
 
-These features may be considered in later versions where they are justified by project requirements.
+### 4.4 Stock Movements
 
----
+Records inventory movements associated with supported operations, helping maintain a record of stock changes.
 
-## 5. Core Business Workflow
+### 4.5 Point of Sale
 
-The core workflow of Version 0.1 is:
+Provides a sales workflow that validates selected products and quantities, checks stock availability, calculates the sale amount, and validates payment.
+
+### 4.6 Sales Records
+
+Stores sales and their associated sale items so that completed transactions can be retrieved and reviewed.
+
+### 4.7 Business Reports
+
+Provides basic reports covering areas such as:
+
+* Sales summaries.
+* Product sales.
+* Inventory levels.
+* Low-stock products.
+
+### 4.8 SQLite Persistence
+
+Uses SQLite to persist application data locally.
+
+### 4.9 Automated Tests
+
+Includes automated tests for application behavior.
+
+The implemented behavior should be verified against the current source code and test suite before this README is used as evidence for a specific feature.
+
+## 5. Project Scope
+
+### Included in Version 0.1
+
+The current project scope includes:
+
+* Product categories.
+* Products.
+* Inventory.
+* Stock movements.
+* Point of Sale.
+* Sales records.
+* Basic reports.
+* SQLite persistence.
+* Dart console interface.
+* Automated tests.
+
+### Outside the Current Scope
+
+The following features are not part of the initial version:
+
+* Flutter mobile application.
+* Online ordering.
+* Delivery management.
+* GPS and location services.
+* Marketplace functionality.
+* Supplier management.
+* Purchase management.
+* Customer management.
+* Employee management.
+* Authentication and advanced authorization.
+* Cloud database integration.
+* Supabase integration.
+* API or backend services.
+* Multi-branch management.
+* Payroll.
+* Full accounting.
+* Advanced analytics.
+* Artificial intelligence.
+
+These features may be considered in future versions if justified by the project's requirements.
+
+## 6. Technology Stack
+
+| Technology | Purpose                               |
+| ---------- | ------------------------------------- |
+| Dart       | Application programming language      |
+| SQLite     | Local relational data persistence     |
+| `sqlite3`  | SQLite database access                |
+| `path`     | File-path utilities                   |
+| `test`     | Automated testing                     |
+| `lints`    | Dart code analysis rules              |
+| Git        | Version control                       |
+| GitHub     | Source-code hosting and collaboration |
+
+Dependency versions and SDK requirements are defined in `pubspec.yaml`.
+
+## 7. System Requirements
+
+To obtain and run the project, you need:
+
+* Git installed on your computer.
+* A Dart SDK compatible with the SDK constraint in `pubspec.yaml`.
+* A terminal or command-line environment.
+* Sufficient permissions to read and write the project directory and its database files.
+
+Visual Studio Code or another code editor is recommended for inspecting and modifying the source code, but a graphical editor is not required to execute the console application.
+
+Verify the installations:
+
+```bash
+git --version
+dart --version
+```
+
+The current `pubspec.yaml` specifies the Dart SDK constraint `^3.13.4`. Use a compatible SDK.
+
+## 8. Getting Started
+
+### Step 1: Clone the Repository
+
+Open a terminal and run:
+
+```bash
+git clone https://github.com/QuantumCodr/shopflow-engineering-project-2026.git
+```
+
+Enter the project directory:
+
+```bash
+cd shopflow-engineering-project-2026
+```
+
+### Step 2: Inspect the Project
+
+Confirm that you are in the repository root, where `pubspec.yaml` is located.
+
+You can inspect the directory contents with:
+
+**Windows PowerShell**
+
+```powershell
+Get-ChildItem
+```
+
+**macOS/Linux**
+
+```bash
+ls
+```
+
+### Step 3: Install Dependencies
+
+Run:
+
+```bash
+dart pub get
+```
+
+This resolves and downloads the dependencies declared in `pubspec.yaml`.
+
+If dependency resolution fails, check the installed Dart version and compare it with the project's SDK constraint.
+
+### Step 4: Open the Project in an Editor
+
+If Visual Studio Code is installed and its `code` command is available, run:
+
+```bash
+code .
+```
+
+Otherwise, open the repository folder using your editor's graphical interface.
+
+## 9. Running the Application
+
+From the repository root, execute:
+
+```bash
+dart run bin/shopflow.dart
+```
+
+The application should display its console interface and allow the user to interact with the available operations.
+
+Follow the instructions shown by the application.
+
+ShopFlow is a console application. It does not require a browser, Flutter runtime, or hosted backend for its current local workflow.
+
+### Updating an Existing Clone
+
+If you already cloned the repository and want to obtain the latest committed changes, run:
+
+```bash
+git switch main
+git pull origin main
+dart pub get
+```
+
+If you have local changes, inspect and preserve them before switching branches or pulling updates.
+
+### Troubleshooting
+
+**The `dart` command is not recognized.**
+
+Install a compatible Dart SDK and ensure its `bin` directory is available through your system's `PATH`. Open a new terminal after changing environment variables.
+
+**Dependency resolution fails.**
+
+Check the Dart SDK version and the constraints declared in `pubspec.yaml`. Review the error message before changing dependency versions.
+
+**The application cannot access its database.**
+
+Check the database path, file permissions, and any error messages produced by the application. Back up existing data before attempting repairs.
+
+**The application does not start.**
+
+Confirm that you are in the repository root, that dependencies have been resolved, and that `bin/shopflow.dart` exists.
+
+Do not delete or recreate the database as a general troubleshooting step.
+
+## 10. Running the Tests
+
+ShopFlow uses the Dart test package.
+
+Run the complete automated test suite from the repository root:
+
+```bash
+dart test
+```
+
+Run static analysis:
+
+```bash
+dart analyze
+```
+
+The analyzer checks the Dart code for issues identified by the project's analysis rules.
+
+Both commands should be executed before submitting the project or proposing changes.
+
+Previously recorded verification results were:
+
+* Static analysis: no issues found.
+* Automated tests: 28 tests passed.
+
+These results describe the previously verified state. Run the commands again to confirm the current repository state before relying on them in an academic submission.
+
+## 11. System Architecture
+
+ShopFlow follows a layered architecture designed to separate user interaction, business logic, data access, and persistence.
 
 ```text
-Category
-   ↓
-Product
-   ↓
-Inventory
-   ↓
++----------------------------------+
+|               CLI                |
+|         User Interaction         |
++----------------------------------+
+                 |
+                 v
++----------------------------------+
+|             Services             |
+| Validation and Business Logic    |
++----------------------------------+
+                 |
+                 v
++----------------------------------+
+|            Repositories          |
+|             Data Access          |
++----------------------------------+
+                 |
+                 v
++----------------------------------+
+|              SQLite              |
+|          Data Persistence        |
++----------------------------------+
+```
+
+### 11.1 Command-Line Interface
+
+The CLI is responsible for:
+
+* Displaying menus and information.
+* Collecting user input.
+* Calling application services.
+* Presenting operation results.
+* Managing the interaction flow.
+
+The CLI should not become the primary location for business rules.
+
+### 11.2 Services
+
+Services implement application workflows and business rules.
+
+Their responsibilities include:
+
+* Input and business-rule validation.
+* Calculations.
+* Stock and sales workflow coordination.
+* Coordination between repositories.
+* Enforcement of relevant business constraints.
+
+### 11.3 Repositories
+
+Repositories are responsible for data access and persistence operations.
+
+Their responsibilities include:
+
+* Retrieving records.
+* Storing records.
+* Updating records.
+* Executing database queries through the data-access layer.
+
+Application-level business decisions should remain in the service layer.
+
+### 11.4 Database Layer
+
+SQLite provides local persistence for supported application data.
+
+Database initialization, transaction handling, and database-specific operations belong in the appropriate database or data-access components.
+
+### Architectural Benefit
+
+Separating these responsibilities helps make the application easier to understand, test, maintain, and extend.
+
+It also creates a foundation for future interfaces that could reuse the business logic rather than duplicating it in the user interface.
+
+## 12. Core Business Workflow
+
+The main business workflow connects product information, inventory, sales, and reporting.
+
+```text
+Category Management
+        |
+        v
+Product Management
+        |
+        v
+Inventory Tracking
+        |
+        v
 Point of Sale
-   ↓
-Sale
-   ↓
+        |
+        v
+Sale and Sale Items
+        |
+        v
 Inventory Update
-   ↓
-Stock Movement
-   ↓
+        |
+        v
+Stock Movement Records
+        |
+        v
 Business Reports
+```
 
-A completed sale should result in:
+### Sale Processing
 
-Validation of the selected products.
-Validation of requested quantities.
-Verification of available stock.
-Calculation of the sale subtotal.
-Calculation of applicable tax.
-Calculation of the final total.
-Validation of the customer's payment.
-Creation of the sale record.
-Creation of sale-item records.
-Reduction of inventory.
-Recording of the corresponding stock movements.
-Availability of updated information for reporting.
-6. Architecture
+A completed sale should follow the applicable validation and transaction rules:
 
-ShopFlow is being developed using a layered architecture.
+1. Validate the sale information.
+2. Confirm that the sale contains valid items.
+3. Validate product availability and active status.
+4. Validate requested quantities.
+5. Check that sufficient stock is available.
+6. Calculate the subtotal.
+7. Calculate the applicable configured tax.
+8. Calculate the final total.
+9. Validate the customer's payment.
+10. Record the sale and sale items.
+11. Reduce the relevant inventory quantities.
+12. Record the corresponding stock movements.
+13. Make the updated information available to reports.
 
-Initial Architecture
-┌─────────────────────────────┐
-│            CLI              │
-│      User Interaction       │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│          SERVICES           │
-│       Business Logic        │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│        REPOSITORIES         │
-│       Data Access           │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│           SQLite            │
-│       Data Persistence      │
-└─────────────────────────────┘
-Architectural Responsibilities
-CLI
+The exact behavior should be verified against the implemented service logic and tests.
 
-Responsible for:
+### Transaction Integrity
 
-displaying information;
-collecting user input;
-presenting results;
-handling basic interaction flow.
+Where the sale workflow uses a database transaction, related changes should succeed or fail together. This helps prevent a sale from being recorded without its corresponding inventory updates.
 
-The CLI should not contain core business rules.
+## 13. Data and Persistence
 
-Services
+The initial domain model includes the following entities.
 
-Responsible for:
+| Entity        | Purpose                                                     |
+| ------------- | ----------------------------------------------------------- |
+| Category      | Organizes products into categories                          |
+| Product       | Stores product details and pricing                          |
+| Inventory     | Represents current stock quantities                         |
+| StockMovement | Records changes to inventory                                |
+| Sale          | Stores sale-level transaction information                   |
+| SaleItem      | Stores the individual products and quantities within a sale |
 
-business rules;
-validation;
-calculations;
-application workflows;
-coordinating multiple repositories;
-enforcing business constraints.
-Repositories
+The database schema and repository implementations define the actual persisted structure.
 
-Responsible for:
+### Historical Sale Information
 
-data access;
-persistence;
-retrieving records;
-storing records;
-updating records.
+Sale items can retain the selling price and cost price applicable at the time of a transaction. Keeping these values with the sale item allows historical sales and gross-profit calculations to use the transaction's recorded prices rather than later product-price changes.
 
-Repositories should not contain application-level business decisions.
+### Tax Configuration
 
-Database
+The tax used by the application should be treated as a configurable application value. The prototype should not be interpreted as establishing the legally applicable tax rate for a particular jurisdiction.
 
-Responsible for persistent storage.
+### Local Database
 
-SQLite is used for the first version.
+The application uses SQLite rather than a hosted cloud database in the current version.
 
-7. Domain Models
+The database file is application data, not merely disposable test output. Preserve it and back it up before performing operations that may modify or replace its contents.
 
-The initial domain includes:
+## 14. Project Structure
 
-Category
-Product
-Sale
-SaleItem
-StockMovement
+The project uses a Dart package structure. The exact directory contents should be confirmed against the checked-out repository.
 
-The domain will expand as the system evolves.
+The principal areas are:
 
-Potential future entities include:
-
-Supplier
-Purchase
-PurchaseItem
-Customer
-Employee
-Tax
-8. Project Structure
-
-The initial project structure is planned as:
-
+```text
 shopflow/
-│
-├── bin/
-│   └── shopflow.dart
-│
-├── lib/
-│   ├── models/
-│   │   ├── category.dart
-│   │   ├── product.dart
-│   │   ├── sale.dart
-│   │   ├── sale_item.dart
-│   │   └── stock_movement.dart
-│   │
-│   ├── repositories/
-│   │   ├── category_repository.dart
-│   │   ├── product_repository.dart
-│   │   ├── inventory_repository.dart
-│   │   └── sale_repository.dart
-│   │
-│   ├── services/
-│   │   ├── category_service.dart
-│   │   ├── product_service.dart
-│   │   ├── inventory_service.dart
-│   │   ├── pos_service.dart
-│   │   └── report_service.dart
-│   │
-│   └── database/
-│       └── database.dart
-│
-├── test/
-│
-├── pubspec.yaml
-├── analysis_options.yaml
-├── README.md
-└── CHANGELOG.md
+|
+|-- bin/
+|   `-- shopflow.dart
+|
+|-- lib/
+|   |-- models/
+|   |-- repositories/
+|   |-- services/
+|   `-- database/
+|
+|-- test/
+|
+|-- pubspec.yaml
+|-- analysis_options.yaml
+|-- README.md
+|-- CONTRIBUTING.md
+`-- CHANGELOG.md
+```
 
-The structure will evolve as new requirements are introduced. New abstractions should only be introduced when they provide a clear architectural benefit.
+### Directory Responsibilities
 
-9. Development Principles
+**`bin/`**
 
-ShopFlow is being developed using the following principles:
+Contains the executable entry point for the console application.
 
-Build incrementally
+**`lib/models/`**
 
-Each feature should be implemented, tested, integrated, and verified before moving to the next major feature.
+Contains domain models representing business entities.
 
-Separate responsibilities
+**`lib/repositories/`**
 
-Each layer should have a clear responsibility.
+Contains data-access components for supported entities and workflows.
 
-Keep business logic independent of the interface
+**`lib/services/`**
 
-Business rules should not depend on the CLI.
+Contains application services and business logic.
 
-This allows future interfaces such as Flutter or an API to reuse the same application logic.
+**`lib/database/`**
 
-Prefer extension over rewriting
+Contains database-related infrastructure.
 
-The project should evolve from its existing foundation.
+**`test/`**
 
-Future functionality should extend existing architecture rather than requiring unnecessary rewrites.
+Contains automated tests.
 
-Avoid premature complexity
+**`pubspec.yaml`**
 
-The project should remain as simple as possible while still being correctly engineered.
+Defines the package metadata, SDK constraints, dependencies, and development dependencies.
 
-Test behavior
+**`analysis_options.yaml`**
 
-Tests should verify meaningful application behavior rather than simply testing implementation details.
+Defines the Dart analysis configuration.
 
-10. Development Roadmap
-Version 0.1 — Assignment 1
-Project Foundation
-        ↓
-Database Foundation
-        ↓
-Categories
-        ↓
-Products
-        ↓
-Inventory
-        ↓
-Point of Sale
-        ↓
-Sales
-        ↓
-Reports
-        ↓
-CLI Integration
-        ↓
-Testing
-        ↓
-Documentation
-Future Development
+**`README.md`**
 
-Potential future evolution:
+Provides project information and usage instructions.
 
-ShopFlow CLI
-     ↓
-Expanded Business Features
-     ↓
-Dart Backend/API
-     ↓
-Flutter Application
-     ↓
-Supabase PostgreSQL
-     ↓
-Authentication & Authorization
-     ↓
-Production-Oriented System
-11. Future Backend Direction
+**`CONTRIBUTING.md`**
 
-The initial version uses SQLite and a console interface.
+Describes development practices and contribution procedures.
 
-The long-term architecture is intended to allow the project to evolve toward:
+## 15. Testing Strategy
 
-Flutter
-   ↓
-Dart API / Backend
-   ↓
-Application Services
-   ↓
-Repositories
-   ↓
-Supabase PostgreSQL
+Testing focuses on meaningful application behavior rather than implementation details alone.
 
-The business logic should remain in the application/backend layer rather than being duplicated inside the Flutter interface.
+Relevant test areas include:
 
-Supabase may later provide infrastructure services such as:
+* Creating valid categories.
+* Rejecting invalid category data.
+* Creating products with valid information.
+* Rejecting invalid product information.
+* Preventing sales of inactive products.
+* Preventing sales that exceed available stock.
+* Calculating sale subtotals.
+* Calculating configured taxes.
+* Calculating sale totals.
+* Validating payment.
+* Updating inventory after a sale.
+* Recording stock movements.
+* Generating business reports.
+* Preserving expected behavior when an operation fails.
 
-PostgreSQL database hosting;
-authentication;
-session management;
-database security;
-cloud infrastructure.
+The automated test suite should be run whenever application behavior changes.
 
-The use of Supabase is intentionally deferred from Assignment 1.
+Manual testing should also be used to verify important end-to-end workflows through the console interface.
 
-12. Authentication Direction
+## 16. Database Safety
 
-Authentication is not part of the initial Version 0.1 implementation.
+Because ShopFlow stores data in SQLite, developers should treat database operations carefully.
 
-In a future version:
+Before testing or changing database-related functionality:
 
-User
-  ↓
-Supabase Authentication
-  ↓
-Authenticated Identity
-  ↓
-Dart Backend
-  ↓
-Authorization
-  ↓
-Business Services
+1. Identify the database file used by the application.
+2. Back up any data that must be preserved.
+3. Understand whether the operation inserts, updates, deletes, or replaces data.
+4. Avoid running destructive operations against a database containing important records.
+5. Use appropriate test data when performing repeatable manual checks.
 
-Supabase would handle authentication infrastructure, while the ShopFlow application would handle application-level authorization and business rules.
+Do not assume that deleting the database is a safe way to resolve application errors.
 
-13. Testing Strategy
+Database schema changes should be reviewed carefully to avoid breaking existing data or application behavior.
 
-Testing will focus on system behavior.
+## 17. Current Limitations
 
-Examples include:
+ShopFlow is a local console prototype rather than a complete commercial retail platform.
 
-creating valid categories;
-rejecting invalid categories;
-creating valid products;
-rejecting invalid product information;
-preventing sales of inactive products;
-preventing sales exceeding available stock;
-calculating correct subtotals;
-calculating correct taxes;
-calculating correct totals;
-validating payment;
-updating inventory after a sale;
-recording stock movements;
-generating correct basic reports.
+The current version does not provide the full set of features required for a production business management system.
 
-The goal is to verify that the system behaves correctly from the perspective of the business requirements.
+In particular:
 
-14. Engineering Workflow
+* It does not provide a Flutter mobile interface.
+* It does not provide a hosted backend or cloud database.
+* It does not implement the deferred supplier, purchase, customer, or employee modules.
+* It does not provide online ordering or delivery management.
+* It does not provide a complete authentication and authorization system.
+* It does not provide multi-branch management, payroll, or full accounting functionality.
+* Its reporting capabilities are limited to the implemented basic reports.
 
-Each major feature follows this general workflow:
+Production deployment would require additional requirements analysis, security design, operational testing, data-management planning, and other work beyond the current assignment scope.
 
-Requirement
-    ↓
-Design
-    ↓
-Model
-    ↓
-Repository
-    ↓
-Service
-    ↓
-Tests
-    ↓
-CLI Integration
-    ↓
-Manual Verification
-    ↓
-Documentation
-    ↓
-Freeze
+## 18. Future Development
 
-A completed feature becomes part of the stable foundation for subsequent features.
+Potential future development may include:
 
-15. Current Status
+* Expanded purchasing and supplier workflows.
+* Customer and employee management.
+* Authentication and authorization.
+* A Flutter application.
+* A backend API.
+* Cloud-hosted PostgreSQL through Supabase.
+* Additional reporting and business analytics.
 
-Version: 0.1.0-dev
+These are possible future directions, not claims about features already delivered in Version 0.1.
 
-Current stage:
+Any expansion should preserve the separation between the interface, application services, repositories, and persistence.
 
-[✓] Project concept
-[✓] Problem definition
-[✓] Initial scope
-[✓] Initial architecture
-[✓] Initial domain design
-[ ] Dart project implementation
-[ ] Database implementation
-[ ] Category module
-[ ] Product module
-[ ] Inventory module
-[ ] POS module
-[ ] Sales module
-[ ] Reports
-[ ] CLI integration
-[ ] Automated testing
-[ ] Final documentation
-16. Project Philosophy
+## 19. Contributing
 
-Build a small complete system rather than a large incomplete system.
+Contributions should follow the project's established engineering principles.
 
-ShopFlow is intentionally being developed as an evolving software project.
+Before making changes:
 
-The first version should be small enough to understand, test, and complete, while being structured well enough to support future development.
+1. Read `CONTRIBUTING.md`.
+2. Understand the current architecture.
+3. Review existing code and tests.
+4. Make focused changes.
+5. Run static analysis and automated tests.
+6. Protect existing database data.
+7. Update documentation when necessary.
 
-17. Author
+For substantial changes to business rules, database structure, or project scope, discuss the proposed approach with the project maintainer first.
 
-Author: QuantumCodr
-Project: ShopFlow
-Language: Dart
-Initial Version: 0.1.0
-Development Approach: Incremental, test-driven, layered architecture
+## 20. License
+
+No license is specified in this README.
+
+Unless a license is added to the repository, do not assume that the project has been released under an open-source license or that unrestricted reuse and redistribution are permitted.
+
+---
+
+**ShopFlow — Small Business Management System**
+
+Built with Dart and SQLite as an incremental software-engineering project.
