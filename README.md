@@ -659,8 +659,20 @@ Before making changes:
 
 For substantial changes to business rules, database structure, or project scope, discuss the proposed approach with the project maintainer first.
 
-## 20. License
+## 20. Project Team
 
+ShopFlow is developed as a group project by a team of five members:
+
+| # | Name | Role / Responsibility | GitHub |
+|---|------|-----------------------|--------|
+| 1 | Member Name | e.g. Categories and products | [@username](https://github.com/username) |
+| 2 | Member Name | e.g. Inventory and stock movements | [@username](https://github.com/username) |
+| 3 | Member Name | e.g. Point of Sale and sales records | [@username](https://github.com/username) |
+| 4 | Member Name | e.g. Reports and CLI | [@username](https://github.com/username) |
+| 5 | Member Name | e.g. Database layer and testing | [@username](https://github.com/username) |
+
+
+21. License
 No license is specified in this README.
 
 Unless a license is added to the repository, do not assume that the project has been released under an open-source license or that unrestricted reuse and redistribution are permitted.
